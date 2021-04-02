@@ -1,12 +1,47 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Todo, fetchTodos } from '../actions';
+import { StoreState } from '../reducers';
 
-export default class App extends Component {
-  render(){
-    return(
-      <div>hello, there</div>
-    )
+interface AppProps {
+  todos: Todo[];
+  fetchTodos(): any;
+}
+
+class _App extends Component<AppProps> {
+  componentDidMount() {}
+
+  onButtonClick = (): void => {
+    this.props.fetchTodos();
+  };
+
+  renderList(): JSX.Element[] {
+    return this.props.todos.map(
+      (todo: Todo): JSX.Element => {
+        return <div key={todo.id}>{todo.title}</div>;
+      }
+    );
+  }
+
+  render() {
+    // console.log(this.props.todos)
+    return (
+      <div>
+        <button onClick={this.onButtonClick}>Fetch</button>;{this.renderList()}
+      </div>
+    );
   }
 }
+
+/* using destructuring */
+const mapStateToProps = ({ todos }: StoreState): { todos: Todo[] } => {
+  return { todos };
+};
+
+/* only exporting the redux-connected App */
+export const App = connect(mapStateToProps, { fetchTodos })(_App);
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // /* in order to pass in a prop without getting an error, we have to specify an interface */
 // /* if there is a case where the component may not receive props, mark them as optional */
