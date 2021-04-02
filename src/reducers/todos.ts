@@ -7,7 +7,7 @@ export const todosReducer = (todos: Todo[] = [], action: Action) => {
     case ActionTypes.fetchTodos:
       return action.payload;
     case ActionTypes.deleteTodo:
-      return todos.filter((todo: Todo) => todo.id !== action.payload)
+      return todos.filter((todo: Todo) => todo.id !== action.payload);
     default:
       return todos;
   }
