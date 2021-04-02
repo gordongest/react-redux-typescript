@@ -20,7 +20,7 @@ export interface DeleteTodoAction {
 
 const url = 'https://jsonplaceholder.typicode.com/todos';
 
-export const fetchTodos = () => {
+export const fetchTodos = (): Function => {
   return async (dispatch: Dispatch) => {
     const response = await axios.get<Todo[]>(url);
 

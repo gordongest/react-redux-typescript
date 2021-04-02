@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Todo, fetchTodos } from '../actions';
+import { Todo, fetchTodos, deleteTodo } from '../actions';
 import { StoreState } from '../reducers';
 
+/* specify the props App expects */
+/* type fetchTodos as Function instead of itself - gets rid of error at export */
+/* add Function as return type to fetchTodos in /actions/types */
 interface AppProps {
   todos: Todo[];
-  fetchTodos(): any;
+  fetchTodos: typeof fetchTodos;
+  deleteTodo: typeof deleteTodo;
 }
 
+/* pass in the prop interface as the generic type */
 class _App extends Component<AppProps> {
   componentDidMount() {}
 
@@ -15,16 +20,25 @@ class _App extends Component<AppProps> {
     this.props.fetchTodos();
   };
 
+  onTodoClick = (id: number): void => {
+    this.props.deleteTodo(id);
+  };
+
   renderList(): JSX.Element[] {
     return this.props.todos.map(
       (todo: Todo): JSX.Element => {
-        return <div key={todo.id} onClick={this.deleteTodo}>{todo.title}</div>;
+        return (
+          <div key={todo.id}>
+            {todo.title}
+            <button onClick={() => this.onTodoClick(todo.id)}>Delete</button>
+          </div>
+        );
       }
     );
   }
 
-  render() {
-    // console.log(this.props.todos)
+  /* render methods return the type JSX.Element */
+  render(): JSX.Element {
     return (
       <div>
         <button onClick={this.onButtonClick}>Fetch</button>
@@ -34,13 +48,15 @@ class _App extends Component<AppProps> {
   }
 }
 
-/* using destructuring */
+/* using destructuring in place of state/state.todos */
 const mapStateToProps = ({ todos }: StoreState): { todos: Todo[] } => {
   return { todos };
 };
 
 /* only exporting the redux-connected App */
-export const App = connect(mapStateToProps, { fetchTodos })(_App);
+/* TS throws an error around _App because it doesn't understand thunk actions - no fix */
+/* see line 7 */
+export const App = connect(mapStateToProps, { fetchTodos, deleteTodo })(_App);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
