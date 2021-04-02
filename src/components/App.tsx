@@ -18,7 +18,7 @@ class _App extends Component<AppProps> {
   renderList(): JSX.Element[] {
     return this.props.todos.map(
       (todo: Todo): JSX.Element => {
-        return <div key={todo.id}>{todo.title}</div>;
+        return <div key={todo.id} onClick={this.deleteTodo}>{todo.title}</div>;
       }
     );
   }
@@ -27,7 +27,8 @@ class _App extends Component<AppProps> {
     // console.log(this.props.todos)
     return (
       <div>
-        <button onClick={this.onButtonClick}>Fetch</button>;{this.renderList()}
+        <button onClick={this.onButtonClick}>Fetch</button>
+        {this.renderList()}
       </div>
     );
   }
